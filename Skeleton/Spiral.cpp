@@ -1,41 +1,57 @@
 #include "Spiral.h"
 
-Spiral::Spiral(size_t size, float width) :size(size), width(1 / width) {}
-
-void Spiral::Create()
+Spiral::Spiral(float turn, float width, float pitch, size_t resolution) :turn(turn), width(1 / width), pitch(pitch), resolution(resolution)
 {
-	glGenVertexArrays(1, &vao);	// get 1 vao id
-	glBindVertexArray(vao);		// make it active
+	rotationMat = mat4{ 1, 0, 0, 0,    // MVP matrix, 
+							0, 1, 0, 0,    // row-major!
+							0, 0, 1, 0,
+							0, 0, 0, 0.8 };
 
-	unsigned int vbo;		// vertex buffer object
-	glGenBuffers(1, &vbo);	// Generate 1 buffer
+	size = resolution * turn;
+}
+
+void Spiral::create()
+{
+
+	GLenum err;
+	while ((err = glGetError()) != GL_NO_ERROR) {
+		std::cerr << "OpenGL error: " << err << std::endl;
+	}
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	// Generate and bind VBO
+	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
 
 	vec2* vertices = new vec2[size];
 
-	float a = 100 * M_PI / 180;
+	float a = 0.003f;
 	int n = 0;
-	float b = 1 / tanf(a);
-	for (float t = 0.0f; t < 40; t += 0.1f)
+	float t;
+	while (n < size)
 	{
+		float t = n * M_PI * 2 * turn / size;
+		//theta = t* t*  size;
+		float r = a * pow(M_E, pitch * t);
+		float x = r * cosf(t);
+		float y = r * sinf(t);
+		vertices[n] = vec2(x, y);
+		n++;
+
+		r *= width;
+		x = r * cosf(t);
+		y = r * sinf(t);
 		if (n < size)
 		{
-			float r = a * pow(M_E, b * t);
-			float x = r * cosf(t);
-			float y = r * sinf(t);
-			vertices[n] = vec2(x, y);
-			n++;
-
-			r *= width;
-			x = r * cosf(t);
-			y = r * sinf(t);
 			vertices[n] = vec2(x, y);
 			n++;
 		}
 		else {
 			break;
 		}
+
 	}
 
 	glBufferData(GL_ARRAY_BUFFER, 	// Copy to GPU target
@@ -48,9 +64,70 @@ void Spiral::Create()
 		2, GL_FLOAT, GL_FALSE, // two floats/attrib, not fixed-point
 		0, NULL); 		     // stride, offset: tightly packed
 
+	delete[] vertices;
+
+
+
 }
 
-void Spiral::Update()
+void Spiral::update(float _turn, float _width, float _pitch, size_t _resolution)
+{
+	turn = _turn;
+	resolution = _resolution;
+	width = _width;
+	pitch = _pitch;
+
+	size = resolution * turn;
+
+	glBindVertexArray(vao);
+
+	vec2* vertices = new vec2[size];
+
+	float a = 0.003f;
+	int n = 0;
+	float t;
+	while (n < size)
+	{
+		float t = n * M_PI * 2 / resolution;
+		//theta = t* t*  size;
+		float r = a * pow(M_E, pitch * t);
+		float x = r * cosf(t);
+		float y = r * sinf(t);
+		vertices[n] = vec2(x, y);
+		n++;
+
+		r *= width;
+		x = r * cosf(t);
+		y = r * sinf(t);
+		if (n < size)
+		{
+			vertices[n] = vec2(x, y);
+			n++;
+		}
+		else {
+			break;
+		}
+
+	}
+
+	std::cout << size << std::endl;
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER,
+		sizeof(vec2) * size,
+		vertices,
+		GL_STATIC_DRAW);
+
+	delete[] vertices;
+
+	GLenum err;
+	while ((err = glGetError()) != GL_NO_ERROR) {
+		std::cerr << "OpenGL error: " << err << std::endl;
+	}
+
+}
+
+void Spiral::render()
 {
 	glBindVertexArray(vao);  // Draw call
 	glDrawArrays(GL_TRIANGLE_STRIP, 0 /*startIdx*/, size /*# Elements*/);

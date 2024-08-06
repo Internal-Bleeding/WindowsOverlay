@@ -1,10 +1,10 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(514,5): warning MSB8028: The intermediate directory (Release\) contains files shared from another project (Skeleton.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  Skeleton.cpp
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (Release\) contains files shared from another project (Skeleton.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  App.cpp
 C:\University\Graphics\GrafikaHaziCsomag\GrafikaHaziCsomag\Programs\Spiral\Skeleton\framework.h(176,17): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\University\Graphics\GrafikaHaziCsomag\GrafikaHaziCsomag\Programs\Spiral\Skeleton\Skeleton.cpp(98,69): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\University\Graphics\GrafikaHaziCsomag\GrafikaHaziCsomag\Programs\Spiral\Skeleton\App.cpp(73,26): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\University\Graphics\GrafikaHaziCsomag\GrafikaHaziCsomag\Programs\Spiral\Skeleton\App.cpp(158,69): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   Generating code
-  10 of 124 functions ( 8.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
+  All 1396 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   Skeleton.vcxproj -> C:\University\Graphics\GrafikaHaziCsomag\GrafikaHaziCsomag\Programs\Spiral\bin\Spiral.exe
